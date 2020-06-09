@@ -41,6 +41,7 @@ def setup_parameters():
             ] = pvalues_mat[j][column_headers["columns"]]
         j += 1
     parameters["users_column"] = tmp
+
     tmp = {}
     i = 1
     j1 = column_headers["class 1 / pipeline"]
@@ -61,6 +62,7 @@ def setup_parameters():
         i += 1
     tmp[pipeline] = tmp_arr
     parameters["cls1"] = tmp
+
     tmp = {}
     i = 1
     j1 = column_headers["class 2 / pipeline"]
@@ -81,4 +83,25 @@ def setup_parameters():
         i += 1
     tmp[pipeline] = tmp_arr
     parameters["cls2"] = tmp
+
+    tmp = {}
+    i = 1
+    j1 = column_headers["class 3 / pipeline"]
+    j2 = column_headers["class 3 / status"]
+    pipeline = pvalues_mat[i][j1]
+    tmp_arr = []
+    while i < len(pvalues_mat):
+        if pvalues_mat[i][j1] == "":
+            break
+
+        if pipeline == pvalues_mat[i][j1]:
+            tmp_arr.append(pvalues_mat[i][j2])
+        else:
+            tmp[pipeline] = tmp_arr
+            pipeline = pvalues_mat[i][j1]
+            tmp_arr = []
+            tmp_arr.append(pvalues_mat[i][j2])
+        i += 1
+    tmp[pipeline] = tmp_arr
+    parameters["cls3"] = tmp
     return parameters
