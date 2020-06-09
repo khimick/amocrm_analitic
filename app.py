@@ -114,8 +114,21 @@ def test_credentials(url):
     return 0
 
 
+def check_for_exlude(event):
+    """
+        Checking, is the event present in exclude list
+    """
+    pipeline_id = str(event["value_before"][0]["lead_status"]["pipeline_id"])
+    event_id = str(event["value_before"][0]["lead_status"]["id"])
+    #print(type(pipeline_id), '***', type(event_id))
+    if pipeline_id in param['cls3'] and event_id in param['cls3'][pipeline_id]:
+        return True
+    return False
+
+
 settings = get_settings(SETTINGS_FILE)
 param = set_parameters.setup_parameters()
+# print(param)
 
 
 gc = pygsheets.authorize(service_file=set_parameters.SSHEET_SECRETS)
@@ -130,12 +143,14 @@ headers = {
 
 
 date_start = date(2020, 5, 1)
+#temp_date = date(2020, 6, 8)
 d = datetime.today().date() - date_start
 row_start = int(param["date_row_start"])+d.days+1  # времмено добавил на июнь
 
 url_api = settings["api_urls"]["events"]["url"]
 if "period" not in param:
     date_start_str = str(datetime.today().date())+" 08:00:00"
+    #date_start_str = str(temp_date) + " 08:00:00"
 
 users_col = param["users_column"]
 users = param["users"]
@@ -165,13 +180,14 @@ for user in users:
         if events is not None:
             num = set()
             for item in events:
-                num.add(item["entity"]["id"])
+                if not check_for_exlude(item):
+                    num.add(item["entity"]["id"])
             count = len(num)
         else:
             print("No status changed for user")
-        cell = users_col[user]+str(row_start+i)
-        worksheet.update_value(cell, count)
-        print(cell, count)
+        #cell = users_col[user]+str(row_start+i)
+        #worksheet.update_value(cell, count)
+        print("подсчитано: ", count)
         # print(create_href(users[0], class_1, timestamp_start, timestamp_stop))
         i = i+1
         date = date+timedelta(days=1)
