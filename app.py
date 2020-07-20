@@ -137,7 +137,7 @@ def check_for_exlude(event):
 
 
 logging.basicConfig(
-    format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG)  # filename=u'mylog.log'
+    format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=u'amocrm_analitic.log')
 
 settings = get_settings(SETTINGS_FILE)
 param = set_parameters.setup_parameters()
