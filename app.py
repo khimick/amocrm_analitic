@@ -136,6 +136,31 @@ def check_for_exlude(event):
     return False
 
 
+def get_epoch_date(user_date):
+    """ return number of days since 1899-12-30
+    """
+    epoch_begin = date(1899, 12, 30)
+    if epoch_begin > user_date:
+        return -1
+    return (user_date-epoch_begin).days
+
+
+def get_day_row_num(wks, col, user_date):
+    # получаем столбец с датой неформатированной
+    date_column = worksheet.get_col(col, value_render='UNFORMATTED_VALUE')
+    # преобразовываем дату в формат  Lotus 1-2-3
+    date_epoch = get_epoch_date(user_date)
+    i = 1
+    for item in date_column:  # ищем по списку дат и разной фигни  нужную дату
+        if type(item) is int:
+            if date_epoch == item:
+                break
+        i += 1
+    if i == len(date_column)+1:
+        return -1
+    return i
+
+
 logging.basicConfig(
     format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=u'amocrm_analitic.log')
 
