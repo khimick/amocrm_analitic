@@ -3,3 +3,4 @@ env
 __pycache__
 client_secret.json
 settings_sd.json
+*.log
