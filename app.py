@@ -4,6 +4,8 @@ from datetime import datetime, timedelta, date
 from events import *
 from time import sleep
 import pygsheets
+from pygsheets.custom_types import *
+
 import set_parameters
 import logging
 # file_id = "1XFvj4TmOSFeB8fcxMuqwCctZoalR0bDFoKCEsJFnVdw"
@@ -182,10 +184,7 @@ headers = {
 }
 
 
-date_start = date(2020, 5, 1)
-# temp_date = date(2020, 6, 8)
-d = datetime.today().date() - date_start
-row_start = int(param["date_row_start"])+d.days+2  # времмено добавил на июнь
+# row_start = int(param["date_row_start"])+d.days+2  # времмено добавил на июнь
 
 url_api = settings["api_urls"]["events"]["url"]
 if "period" not in param:
@@ -205,9 +204,12 @@ test_credentials(url)
 
 
 worksheet = ssht.worksheet_by_title("develop")
+# захардкожен номер столбца 2
+today_row = get_day_row_num(worksheet, 2, datetime.today().date())
 for user in users:
     logging.info("user: %s", user)
     i = 0
+    # дата для запроса в амо
     date = datetime.strptime(date_start_str, "%Y-%m-%d %H:%M:%S")
     while i < number_of_days:
         count = 0
@@ -230,7 +232,7 @@ for user in users:
             count = len(num)
         else:
             print("No status changed for user")
-        cell = users_col[user]+str(row_start+i)
+        cell = users_col[user]+str(today_row)  # тут задать строку
         worksheet.update_value(cell, count)
         print("подсчитано: ", count)
         # print(create_href(users[0], class_1, timestamp_start, timestamp_stop))
