@@ -12,6 +12,7 @@ import logging
 credentials = {"acces_token": ""}
 headers = None
 number_of_days = 1
+sheet_name = 'Рабочая'
 # date_start_str = "2020-05-19 08:00:00"
 SETTINGS_FILE = "settings_sd.json"
 # ADMIN = 3010354
@@ -203,7 +204,7 @@ logging.debug("test access url - %s", url)
 test_credentials(url)
 
 
-worksheet = ssht.worksheet_by_title("develop")
+worksheet = ssht.worksheet_by_title(sheet_name)
 # захардкожен номер столбца 2
 today_row = get_day_row_num(worksheet, 2, datetime.today().date())
 for user in users:
