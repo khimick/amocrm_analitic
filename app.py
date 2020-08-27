@@ -165,7 +165,7 @@ def get_day_row_num(wks, col, user_date):
 
 
 logging.basicConfig(
-    format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.DEBUG, filename=u'amocrm_analitic.log')
+    format=u'%(levelname)-8s [%(asctime)s] %(message)s', level=logging.INFO, filename=u'amocrm_analitic.log')
 
 settings = get_settings(SETTINGS_FILE)
 param = set_parameters.setup_parameters()
@@ -233,6 +233,7 @@ for user in users:
             count = len(num)
         else:
             print("No status changed for user")
+        logging.info("date: % s", today_row)
         cell = users_col[user]+str(today_row)  # тут задать строку
         worksheet.update_value(cell, count)
         print("подсчитано: ", count)
